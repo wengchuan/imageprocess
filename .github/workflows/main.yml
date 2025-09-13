@@ -1,0 +1,40 @@
+name : BuildTest
+on:
+ push: 
+  branches:
+  - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v5
+    - uses: actions/setup-java@v5
+      with: 
+       java-version: '17'
+       distribution: 'temurin'
+    - name: Cache Gradle packages
+      uses: actions/cache@v4
+      with:
+        path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+        restore-keys: |
+            ${{ runner.os }}-gradle-
+    - uses: harmon758/postgresql-action@v1
+      with:
+          postgresql version: '11'
+          postgresql db: 'postgres'
+          postgresql user: 'postgres'
+          postgresql password: 'postgres'
+          
+    - run: chmod +x ./gradlew
+    - name: Build and Test
+      env:
+          DATABASEURL: jdbc:postgresql://localhost:5432/postgres
+          DBUSERNAME: postgres
+          DBPASSWORD: postgres
+          secretKey: asdasdqweqw12312339839niYUjduynsdiu83jGjsdiq027AbsyunsduS28916jdfbcuQNDUIncy
+      run: ./gradlew build
+
