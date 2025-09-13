@@ -35,5 +35,6 @@ jobs:
           DATABASEURL: jdbc:postgresql://localhost:5432/postgres
           DBUSERNAME: postgres
           DBPASSWORD: postgres
+          secretKey: asdasdqweqw12312339839niYUjduynsdiu83jGjsdiq027AbsyunsduS28916jdfbcuQNDUIncy
       run: ./gradlew build
 
