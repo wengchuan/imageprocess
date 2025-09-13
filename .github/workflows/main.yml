@@ -24,4 +24,5 @@ jobs:
             ${{ runner.os }}-gradle-
             
     - run: chmod +x ./gradlew
+    - run: ./gradlew build
 
