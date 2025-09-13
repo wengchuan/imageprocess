@@ -1,6 +1,7 @@
 package com.imageprocess.controller;
 
 import com.imageprocess.dto.CreateUserDTO;
+import com.imageprocess.model.User;
 import com.imageprocess.service.JwtGeneratorInterface;
 import com.imageprocess.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,4 +38,15 @@ public class AuthenticationController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
         }
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> loginUser(@RequestBody CreateUserDTO createUserDTO){
+        User user = userService.loginUser(createUserDTO);
+        if(user!=null){
+            return ResponseEntity.ok().body(jwtGeneratorInterface.generateToken(user));
+
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+
 }
