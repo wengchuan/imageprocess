@@ -22,7 +22,18 @@ jobs:
         key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
         restore-keys: |
             ${{ runner.os }}-gradle-
-            
+    - uses: harmon758/postgresql-action@v1
+      with:
+          postgresql version: '11'
+          postgresql db: 'postgres'
+          postgresql user: 'postgres'
+          postgresql password: 'postgres'
+          
     - run: chmod +x ./gradlew
-    - run: ./gradlew build
+    - name: Build and Test
+      env:
+          DATABASEURL: jdbc:postgresql://localhost:5432/postgres
+          DBUSERNAME: postgres
+          DBPASSWORD: postgres
+      run: ./gradlew build
 
