@@ -23,7 +23,7 @@ public class StorageServiceImpl implements StorageService {
 
     @Autowired
     public StorageServiceImpl(Storage storage,
-                              @Value("${bucket-name}") String bucketName) {
+                              @Value("${bucket_name}") String bucketName) {
         this.storage = storage;
         this.bucketName = bucketName;
     }
