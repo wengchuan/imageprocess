@@ -36,5 +36,7 @@ jobs:
           DBUSERNAME: postgres
           DBPASSWORD: postgres
           secretKey: asdasdqweqw12312339839niYUjduynsdiu83jGjsdiq027AbsyunsduS28916jdfbcuQNDUIncy
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+          bucket_name: ${{env.bucket_name}}
       run: ./gradlew build
 
