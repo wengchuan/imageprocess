@@ -30,7 +30,8 @@ jobs:
           postgresql password: 'postgres'
 
     - name: Write GCP credentials to file
-      run: echo "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}" > ${{ github.workspace }}/gcp-credentials.json
+      run: |
+          echo '${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}' > ${{ github.workspace }}/gcp-credentials.json
 
     - run: chmod +x ./gradlew
     - name: Build and Test
