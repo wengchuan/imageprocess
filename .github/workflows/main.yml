@@ -28,7 +28,10 @@ jobs:
           postgresql db: 'postgres'
           postgresql user: 'postgres'
           postgresql password: 'postgres'
-          
+
+    - name: Write GCP credentials to file
+      run: echo "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}" > ${{ github.workspace }}/gcp-credentials.json
+
     - run: chmod +x ./gradlew
     - name: Build and Test
       env:
@@ -36,7 +39,7 @@ jobs:
           DBUSERNAME: postgres
           DBPASSWORD: postgres
           secretKey: asdasdqweqw12312339839niYUjduynsdiu83jGjsdiq027AbsyunsduS28916jdfbcuQNDUIncy
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/gcp-credentials.json
           bucket_name: ${{env.bucket_name}}
       run: ./gradlew build
 
