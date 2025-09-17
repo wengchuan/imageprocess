@@ -10,10 +10,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import com.google.cloud.storage.BlobInfo;
 
+import java.net.URL;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class StorageServiceImpl implements StorageService {
@@ -29,9 +32,10 @@ public class StorageServiceImpl implements StorageService {
     }
 
     @Override
-    public String uploadFile(MultipartFile file)  {
+    public Map<String,String> uploadFile(MultipartFile file)  {
+        Map<String,String> imageDetails = new HashMap<>();
         try{
-            String filename = file.getName();
+            String filename = file.getOriginalFilename();
             byte[] fileBytes = file.getBytes();
             long fileSize = file.getSize();
             String contentType = file.getContentType();
@@ -55,7 +59,11 @@ public class StorageServiceImpl implements StorageService {
             final Blob blob = storage.create(blobInfo,fileBytes);
 
             if(blob!=null && !blob.getContentType().isBlank()){
-                return metadata.toString();
+                URL url = storage.signUrl(blobInfo,15, TimeUnit.MINUTES,Storage.SignUrlOption.withV4Signature());
+
+                imageDetails.put("url", String.valueOf(url));
+                imageDetails.put("metadata", Objects.requireNonNull(blob.getMetadata()).toString());
+                return imageDetails;
             }
 
 
@@ -63,6 +71,6 @@ public class StorageServiceImpl implements StorageService {
             throw new RuntimeException(e);
         }
 
-        return "failed to upload";
+        return imageDetails;
     }
 }

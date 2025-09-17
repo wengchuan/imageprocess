@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Map;
+
 @Controller
 @RequestMapping("/api/image")
 public class ImageStorageController {
@@ -24,9 +26,9 @@ public class ImageStorageController {
     @PostMapping("/upload")
     public ResponseEntity<?> handleUpload(@RequestParam("file") MultipartFile file) throws Exception {
 
-       String info = service.uploadFile(file);
+        Map<String,String> imageDetails = service.uploadFile(file);
 
-       return ResponseEntity.ok().body(info);
+       return ResponseEntity.ok().body(imageDetails);
     }
 
 
