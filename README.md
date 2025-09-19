@@ -131,7 +131,7 @@ Authorization: Bearer <jwt-token>
 ### Steps
 1. Clone the repository:
    ```bash
-   git clone [<repository-url>(https://github.com/wengchuan/imageprocess.git)
+   git clone https://github.com/wengchuan/imageprocess.git
    ```
 
 2. Navigate to the project directory:
