@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/api/auth")
 public class AuthenticationController {
@@ -38,8 +40,8 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody CreateUserDTO createUserDTO){
-        User user = userService.loginUser(createUserDTO);
-        if(user!=null){
+        Optional<User> user = userService.loginUser(createUserDTO);
+        if(user.isPresent()){
             return ResponseEntity.ok().body(jwtGeneratorInterface.generateToken(createUserDTO));
 
         }

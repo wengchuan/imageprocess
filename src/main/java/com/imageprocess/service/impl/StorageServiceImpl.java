@@ -9,6 +9,7 @@ import com.imageprocess.repository.ImagesRepository;
 import com.imageprocess.service.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -99,6 +100,38 @@ public class StorageServiceImpl implements StorageService {
         User userDetail = (User) authentication.getPrincipal();
         List<Images> imagesList = imagesRepository.findByUserId(userDetail.getId());
 
+        try {
+            imagesList.forEach((image) -> {
+                BlobInfo blobInfo = BlobInfo.newBuilder(bucketName,image.getImageName()).build();
+                URL url = storage.signUrl(blobInfo,
+                        15,
+                        TimeUnit.MINUTES,
+                        Storage.SignUrlOption.withV4Signature());
+
+                ImageResponseDTO imageResponseDTO = new ImageResponseDTO();
+                imageResponseDTO.setId(image.getId());
+                imageResponseDTO.setImageName(image.getImageName());
+                imageResponseDTO.setUrl(String.valueOf(url));
+
+
+                imageResponseDTOList.add(imageResponseDTO);
+            });
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        return imageResponseDTOList;
+    }
+
+    @Override
+    public List<ImageResponseDTO> getPaginatedImages(Pageable pageable) {
+        List<ImageResponseDTO> imageResponseDTOList = new ArrayList<>();
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User userDetail = (User) authentication.getPrincipal();
+        List<Images> imagesList = imagesRepository.findAllByUserId(userDetail.getId(),pageable);
+
 
         try {
             imagesList.forEach((image) -> {
@@ -123,6 +156,7 @@ public class StorageServiceImpl implements StorageService {
 
         return imageResponseDTOList;
     }
+
 
     @Override
     public ImageResponseDTO getImage(long id) {

@@ -189,7 +189,7 @@ public class ImageTransformServiceImpl implements ImageTransformService {
                 // Convert the transformed image back to byte array
                 String fileType = blob.getContentType().substring(6);
 
-                if(!imageTransformDTO.getTransformations().getFormat().isBlank()){
+                if(imageTransformDTO.getTransformations().getFormat() !=null){
 
                     String fileFormat = "image/"+imageTransformDTO.getTransformations().getFormat();
                     Map<String, String> metadata = new HashMap<>(Objects.requireNonNull(blob.getMetadata()));

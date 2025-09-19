@@ -31,6 +31,8 @@ dependencies {
 	implementation 'io.jsonwebtoken:jjwt:0.12.6'
 	implementation 'com.google.cloud:spring-cloud-gcp-starter-storage:7.3.0'
 	implementation 'net.coobird:thumbnailator:0.4.20'
+	// https://mvnrepository.com/artifact/com.github.vladimir-bukhtoyarov/bucket4j-core
+	implementation 'com.github.vladimir-bukhtoyarov:bucket4j-core:8.0.1'
 	implementation 'org.postgresql:postgresql'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
